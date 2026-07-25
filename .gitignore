@@ -1,0 +1,37 @@
+# Sensitive Environment & Secrets (CRITICAL)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# IDE / Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python Cache & Runtime
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing & Coverage
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Logs & OS Specific
+*.log
+.DS_Store
+Thumbs.db
