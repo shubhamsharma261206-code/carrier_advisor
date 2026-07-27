@@ -1,5 +1,4 @@
 from groq import Groq
-
 from config import Config
 
 
@@ -35,9 +34,9 @@ class GroqAI:
                     }
                 ],
 
-                temperature=0.2,
+                temperature=0.3,
 
-                max_tokens=1500
+                max_tokens=2048
 
             )
 

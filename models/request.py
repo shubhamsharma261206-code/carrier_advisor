@@ -6,23 +6,8 @@ class CareerRequest(BaseModel):
     Request model for Career Advisor AI.
     """
 
-    career: str = Field(
+    query: str = Field(
         ...,
-        description="Desired career of the user",
-        example="AI Engineer"
-    )
-
-    user_name: str | None = Field(
-        default=None,
-        description="Optional user name"
-    )
-
-    country: str = Field(
-        default="India",
-        description="Country for salary and market analysis"
-    )
-
-    experience: str = Field(
-        default="Fresher",
-        description="Experience level of the user"
+        description="User's career-related query",
+        example="I want to become an AI Engineer in India."
     )

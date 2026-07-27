@@ -1,5 +1,4 @@
 from services.prompt_manager import PromptManager
-from tools.llm.google_ai import GoogleAI
 
 
 class SalaryAgent:
@@ -7,8 +6,8 @@ class SalaryAgent:
     Handles salary-related information for a career.
     """
 
-    def __init__(self, google: GoogleAI):
-        self.google = google
+    def __init__(self, llm):
+        self.llm = llm
 
     def execute(
         self,
@@ -28,7 +27,6 @@ class SalaryAgent:
                 "error": "Career name not found."
             }
 
-        # Extract only useful search content
         if search_result["success"]:
 
             results = search_result["data"].get("results", [])
@@ -49,16 +47,7 @@ class SalaryAgent:
             search_data=search_data
         )
 
-        result = self.google.generate(prompt)
-
-        if isinstance(result, dict):
-
-            return {
-                "success": result["success"],
-                "agent": "salary",
-                "data": result["data"],
-                "error": result["error"]
-            }
+        result = self.llm.generate(prompt)
 
         return {
             "success": True,

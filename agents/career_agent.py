@@ -1,5 +1,4 @@
 from services.prompt_manager import PromptManager
-from tools.llm.google_ai import GoogleAI
 
 
 class CareerAgent:
@@ -7,8 +6,11 @@ class CareerAgent:
     Handles career overview and career-related information.
     """
 
-    def __init__(self, google: GoogleAI):
-        self.google = google
+    def __init__(self, llm):
+        """
+        llm can be GoogleAI or GroqAI.
+        """
+        self.llm = llm
 
     def execute(
         self,
@@ -36,7 +38,7 @@ class CareerAgent:
             search_data=search_data
         )
 
-        result = self.google.generate(prompt)
+        result = self.llm.generate(prompt)
 
         return {
             "success": True,

@@ -8,7 +8,6 @@ from agents.interview_agent import InterviewAgent
 
 from services.response_builder import ResponseBuilder
 
-from tools.llm.google_ai import GoogleAI
 from tools.llm.groq_ai import GroqAI
 from tools.search.search_tool import SearchTool
 
@@ -25,27 +24,27 @@ class Orchestrator:
         # Initialize Tools
         # -------------------------
 
-        self.google = GoogleAI()
-        self.groq = GroqAI()
+        self.llm = GroqAI()
+
         self.search = SearchTool()
 
         # -------------------------
         # Initialize Agents
         # -------------------------
 
-        self.router = RouterAgent(self.groq)
+        self.router = RouterAgent(self.llm)
 
-        self.analyzer = AnalyzerAgent(self.groq)
+        self.analyzer = AnalyzerAgent(self.llm)
 
-        self.career_agent = CareerAgent(self.google)
+        self.career_agent = CareerAgent(self.llm)
 
-        self.salary_agent = SalaryAgent(self.google)
+        self.salary_agent = SalaryAgent(self.llm)
 
-        self.trend_agent = TrendAgent(self.google)
+        self.trend_agent = TrendAgent(self.llm)
 
-        self.roadmap_agent = RoadmapAgent(self.google)
+        self.roadmap_agent = RoadmapAgent(self.llm)
 
-        self.interview_agent = InterviewAgent(self.google)
+        self.interview_agent = InterviewAgent(self.llm)
 
         # -------------------------
         # Response Builder
@@ -88,35 +87,30 @@ class Orchestrator:
         responses = {}
 
         if "career" in selected_agents:
-
             responses["career"] = self.career_agent.execute(
                 analysis,
                 search_result
             )
 
         if "salary" in selected_agents:
-
             responses["salary"] = self.salary_agent.execute(
                 analysis,
                 search_result
             )
 
         if "trend" in selected_agents:
-
             responses["trend"] = self.trend_agent.execute(
                 analysis,
                 search_result
             )
 
         if "roadmap" in selected_agents:
-
             responses["roadmap"] = self.roadmap_agent.execute(
                 analysis,
                 search_result
             )
 
         if "interview" in selected_agents:
-
             responses["interview"] = self.interview_agent.execute(
                 analysis,
                 search_result

@@ -1,69 +1,41 @@
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, HTTPException
+import traceback
 
-from config import Config
 from models.request import CareerRequest
-from models.response import CareerResponse
+from services.orchestrator import Orchestrator
 
-
-# --------------------------------------------------
-# Create FastAPI Application
-# --------------------------------------------------
 
 app = FastAPI(
-    title=Config.APP_NAME,
-    version=Config.VERSION,
-    description="An AI-powered Career Advisor using Multi-Agent Architecture"
+    title="Career Advisor AI",
+    version="1.0.0",
+    description="Multi-Agent Career Advisor using FastAPI, Groq, Gemini and Tavily"
 )
 
+orchestrator = Orchestrator()
 
-# --------------------------------------------------
-# Home Route
-# --------------------------------------------------
 
 @app.get("/")
-async def home():
+def home():
 
     return {
-        "message": "Welcome to Career Advisor AI",
-        "version": Config.VERSION,
-        "status": "Running Successfully"
+        "message": "Career Advisor AI is running."
     }
 
 
-# --------------------------------------------------
-# Health Check Route
-# --------------------------------------------------
+@app.post("/career")
+def career_advisor(request: CareerRequest):
 
-@app.get("/health")
-async def health_check():
+    try:
 
-    return {
-        "status": "Healthy",
-        "application": Config.APP_NAME
-    }
+        response = orchestrator.execute(request.query)
 
+        return response
 
-# --------------------------------------------------
-# Career Advisor Route
-# --------------------------------------------------
+    except Exception as e:
 
-@app.post("/career", response_model=CareerResponse)
-async def career_advisor(request: CareerRequest):
+        traceback.print_exc()   # <-- Prints full error in terminal
 
-    """
-    This endpoint will later call the Orchestrator.
-    Currently, it returns dummy data.
-    """
-
-    response = CareerResponse(
-        career=request.career,
-        response=f"You want to become a {request.career}. AI Agents will analyze this career shortly.",
-        sources=[],
-        success=True
-    )
-
-    return JSONResponse(
-        status_code=200,
-        content=response.model_dump()
-    )
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )

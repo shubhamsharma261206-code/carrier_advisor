@@ -1,12 +1,10 @@
 from typing import List
-
 from tools.llm.groq_ai import GroqAI
 
 
 class RouterAgent:
     """
-    Decides which agents should execute
-    based on the user's request.
+    Decides which agents should execute.
     """
 
     def __init__(self, groq: GroqAI):
@@ -25,55 +23,21 @@ class RouterAgent:
         prompt = f"""
 You are an AI Router.
 
-Your job is to decide which AI agents should execute.
+Available agents:
 
-Available Agents:
-
-1. career
-   - Career Overview
-   - Skills
-   - Responsibilities
-   - Qualifications
-
-2. salary
-   - Salary
-   - Pay Scale
-   - Packages
-
-3. trend
-   - Future Scope
-   - Job Demand
-   - Hiring Trends
-   - Market Growth
-
-4. roadmap
-   - Learning Path
-   - Courses
-   - Certifications
-   - Projects
-
-5. interview
-   - Interview Questions
-   - Resume
-   - Preparation
+career
+salary
+trend
+roadmap
+interview
 
 User Query:
-
 {user_query}
 
-Rules:
-
-Return ONLY comma separated values.
+Return ONLY comma separated agent names.
 
 Example:
-
-career,salary
-
-or
-
-career,trend,roadmap
-
-Nothing else.
+career,salary,trend
 """
 
         result = self.groq.generate(prompt)
@@ -92,4 +56,5 @@ Nothing else.
 
         if not selected_agents:
             selected_agents.append("career")
+
         return selected_agents
